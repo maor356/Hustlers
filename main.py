@@ -22,7 +22,7 @@ class Tile:
         
 def checkLeftCorner(x,y,width,height):
     
-    if (int(x)+int(width) >= widthField) or (int(x) < 0) or ((int(y)+int(height) >= heightField) or (int(y)) < 0):
+    if (int(x)+int(width) > widthField) or (int(x) < 0) or ((int(y)+int(height) > heightField) or (int(y)) < 0):
         
         return False
     for i in range(int(x),int(x)+int(width)-1):
@@ -81,13 +81,14 @@ while (notSolved):
     coordinateList = copy.deepcopy(freshCoordinates)
     placeable = True
     
-    while(len(unusedTiles) > 0 and placeable == True):
+    while((len(unusedTiles) > 0) and (placeable == True)):
         nextTile = unusedTiles.pop(randint(0,len(unusedTiles)-1))
         
         placed = False
        
         
         while (sum2darray(unusedCoordinates) < widthField*heightField) and (placed == False):
+            
             randX = randint(0,widthField-1)
             randY = randint(0,heightField-1)
             
@@ -99,6 +100,7 @@ while (notSolved):
                     paintField(coordinateList,randX,randY,nextTile.width,nextTile.height)
                     usedTiles.append(nextTile)
                     placed = True
+                    
                 elif (checkLeftCorner(randX,randY,nextTile.width,nextTile.height) == True):
                     nextTile.x = randX
                     nextTile.y = randY
@@ -106,6 +108,7 @@ while (notSolved):
                     paintField(coordinateList,randX,randY,nextTile.width,nextTile.height)
                     usedTiles.append(nextTile)
                     placed = True
+                    
                 else:
                     unusedCoordinates[randX][randY] = 1
                   
@@ -114,12 +117,16 @@ while (notSolved):
 
  
     
-    if (unusedTiles == 0) and (placeable == True):
+    
+    
+    if (len(unusedTiles) == 0) and (placeable == True):
         notSolved = False
         
-for i in range(len(usedTiles)):       
-        print(usedTiles[i].x,",",usedTiles[i].y,",",usedTiles[i].sideWays)
         
+       
+for i in range(len(usedTiles)):       
+        print(usedTiles[i].x,",",usedTiles[i].y,",",usedTiles[i].sideWays)      
+    
     
 if pylab_installed:
     pylab.axis([0, widthField, 0, heightField])
