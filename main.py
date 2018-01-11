@@ -25,25 +25,25 @@ def checkLeftCorner(x,y,width,height):
     if (int(x)+int(width) > widthField) or (int(x) < 0) or ((int(y)+int(height) > heightField) or (int(y)) < 0):
         
         return False
-    for i in range(int(x),int(x)+int(width)-1):
-        for j in range(int(y),int(y)+int(height)-1):
-           
+    for i in range(int(x),int(x)+int(width)):
+        for j in range(int(y),int(y)+int(height)):
+            
             if(coordinateList[i][j] == 1):
                 return False
     
     return True
 def paintField(field,x,y,width,height):  
     
-    for i in range(x,x+width-1):
-        for j in range(y,y+height-1):
+    for i in range(x,x+width):
+        for j in range(y,y+height):
             
             field[i][j] = 1
-    
+            
 def sum2darray(input):
     return sum(map(sum, input))
 
 
-file = open("C:/Users/Rens/Dropbox/School/heuristics/tilings/15-0-0.tiles","r") 
+file = open("C:/Users/Rens/Dropbox/School/heuristics/simple.tiles","r") 
 tileList = []
 
 
@@ -68,11 +68,11 @@ for line in file:
 #random placement algorithm
 usedTiles = []
 unusedTiles = copy.deepcopy(tileList)
-notSolved = True
+Solved = False
 placeable = True
 freshCoordinates = copy.deepcopy(coordinateList)
 maxReached = 0
-while (notSolved):
+while (Solved == False):
     
             
     usedTiles = []
@@ -101,31 +101,32 @@ while (notSolved):
                     usedTiles.append(nextTile)
                     placed = True
                     
-                elif (checkLeftCorner(randX,randY,nextTile.width,nextTile.height) == True):
+                elif (checkLeftCorner(randX,randY,nextTile.height,nextTile.width) == True):
                     nextTile.x = randX
                     nextTile.y = randY
                     nextTile.sideWays = True
-                    paintField(coordinateList,randX,randY,nextTile.width,nextTile.height)
+                    paintField(coordinateList,randX,randY,nextTile.height,nextTile.width)
                     usedTiles.append(nextTile)
                     placed = True
                     
                 else:
                     unusedCoordinates[randX][randY] = 1
-                  
-        if (placed == False):
-            placeable = False
-
- 
+                    
+        
+        
+        placeable = placed
+        
+   
     
     
     
     if (len(unusedTiles) == 0) and (placeable == True):
-        notSolved = False
+        Solved = True
         
         
        
 for i in range(len(usedTiles)):       
-        print(usedTiles[i].x,",",usedTiles[i].y,",",usedTiles[i].sideWays)      
+        print(usedTiles[i].x,",",usedTiles[i].y,",",usedTiles[i].width,",",usedTiles[i].height,",",usedTiles[i].sideWays)      
     
     
 if pylab_installed:
@@ -133,5 +134,14 @@ if pylab_installed:
     pylab.grid()
     pylab.xticks(range(widthField+1))
     pylab.yticks(range(heightField+1))
-   
+    for k in range(len(usedTiles)): 
+            if (usedTiles[k].sideWays):
+                pylab.fill([usedTiles[k].x, usedTiles[k].x, usedTiles[k].x+usedTiles[k].height, usedTiles[k].x+usedTiles[k].height],
+                [usedTiles[k].y, usedTiles[k].y+usedTiles[k].width, usedTiles[k].y+usedTiles[k].width, usedTiles[k].y],
+                facecolor = '#D0D0D0',edgecolor = '#000000')
+            else:
+               pylab.fill([usedTiles[k].x, usedTiles[k].x, usedTiles[k].x+usedTiles[k].width, usedTiles[k].x+usedTiles[k].width],
+               [usedTiles[k].y, usedTiles[k].y+usedTiles[k].height, usedTiles[k].y+usedTiles[k].height, usedTiles[k].y],
+               facecolor = '#D0D0D0',edgecolor = '#000000')
+
     pylab.show()
