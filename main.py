@@ -22,11 +22,11 @@ class Tile:
         
 def checkLeftCorner(x,y,width,height):
     
-    if (int(x)+int(width) >= widthField) or (int(x) < 0) or ((int(y)+int(height) >= heightField) or (int(y)) < 0):
+    if (int(x)+int(width) > widthField) or (int(x) < 0) or ((int(y)+int(height) > heightField) or (int(y)) < 0):
         
         return False
-    for i in range(int(x),int(x)+int(width)-1):
-        for j in range(int(y),int(y)+int(height)-1):
+    for i in range(int(x),int(x)+int(width)):
+        for j in range(int(y),int(y)+int(height)):
            
             if(coordinateList[i][j] == 1):
                 return False
@@ -34,8 +34,8 @@ def checkLeftCorner(x,y,width,height):
     return True
 def paintField(field,x,y,width,height):  
     
-    for i in range(x,x+width-1):
-        for j in range(y,y+height-1):
+    for i in range(x,x+width):
+        for j in range(y,y+height):
             
             field[i][j] = 1
     
@@ -43,7 +43,7 @@ def sum2darray(input):
     return sum(map(sum, input))
 
 
-file = open("C:/Users/Rens/Dropbox/School/heuristics/tilings/15-0-0.tiles","r") 
+file = open("C:/Users/Rens2/Documents/simple.tiles","r") 
 tileList = []
 
 
@@ -99,11 +99,11 @@ while (notSolved):
                     paintField(coordinateList,randX,randY,nextTile.width,nextTile.height)
                     usedTiles.append(nextTile)
                     placed = True
-                elif (checkLeftCorner(randX,randY,nextTile.width,nextTile.height) == True):
+                elif (checkLeftCorner(randX,randY,nextTile.height,nextTile.width) == True):
                     nextTile.x = randX
                     nextTile.y = randY
                     nextTile.sideWays = True
-                    paintField(coordinateList,randX,randY,nextTile.width,nextTile.height)
+                    paintField(coordinateList,randX,randY,nextTile.height,nextTile.width)
                     usedTiles.append(nextTile)
                     placed = True
                 else:
@@ -114,11 +114,11 @@ while (notSolved):
 
  
     
-    if (unusedTiles == 0) and (placeable == True):
+    if (len(unusedTiles) == 0) and (placeable == True):
         notSolved = False
         
 for i in range(len(usedTiles)):       
-        print(usedTiles[i].x,",",usedTiles[i].y,",",usedTiles[i].sideWays)
+        print(usedTiles[i].x,",",usedTiles[i].y,",",usedTiles[i].width,",",usedTiles[i].height,",",usedTiles[i].sideWays)
         
     
 if pylab_installed:
