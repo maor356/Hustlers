@@ -120,7 +120,7 @@ while (notSolved):
 for i in range(len(usedTiles)):       
         print(usedTiles[i].x,",",usedTiles[i].y,",",usedTiles[i].width,",",usedTiles[i].height,",",usedTiles[i].sideWays)
         
-    
+ print("test")   
 if pylab_installed:
     pylab.axis([0, widthField, 0, heightField])
     pylab.grid()
