@@ -119,12 +119,19 @@ while (notSolved):
         
 for i in range(len(usedTiles)):       
         print(usedTiles[i].x,",",usedTiles[i].y,",",usedTiles[i].width,",",usedTiles[i].height,",",usedTiles[i].sideWays)
-        
- print("test")   
+   
 if pylab_installed:
     pylab.axis([0, widthField, 0, heightField])
     pylab.grid()
     pylab.xticks(range(widthField+1))
     pylab.yticks(range(heightField+1))
-   
+    for i in range(len(usedTiles)):
+        if (usedTiles[i].sideWays):
+            pylab.fill([usedTiles[i].x, usedTiles[i].x, usedTiles[i].x+usedTiles[i].height, usedTiles[i].x+usedTiles[i].height],
+            [usedTiles[i].y, usedTiles[i].y+usedTiles[i].width, usedTiles[i].y+usedTiles[i].width, usedTiles[i].y],
+            facecolor = '#D0D0D0',edgecolor='#000000')
+        else:
+            pylab.fill([usedTiles[i].x, usedTiles[i].x, usedTiles[i].x+usedTiles[i].width, usedTiles[i].x+usedTiles[i].width],
+            [usedTiles[i].y, usedTiles[i].y+usedTiles[i].height, usedTiles[i].y+usedTiles[i].height, usedTiles[i].y],
+            facecolor = '#D0D0D0',edgecolor='#000000')
     pylab.show()
