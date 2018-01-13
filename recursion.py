@@ -40,8 +40,8 @@ def isFull(field):
     return findTopLeft(field) == False;
 
 def fits(tile, field, topLeft):
-    a = tile.width + topLeft[0]  <= len(field)
-    b = tile.height + topLeft[1]  <= len(field[0])
+    a = tile.width + topLeft[0]  <= len(field[0])
+    b = tile.height + topLeft[1]  <= len(field)
     return (a and b)
 
 def placeTile2(tile, field, topLeft):
@@ -86,7 +86,7 @@ def placeTile(tiles, field):
                 tilesc.append(tile)
     return
 
-file = open("mid.tiles","r")
+file = open("example.tiles","r")
 
 properties = file.readline().rstrip().split(" ")
 widthField = int(properties[1])
@@ -94,7 +94,6 @@ heightField = int(properties[3])
 scaleField = int(properties[5])
 
 coordinateList = [[0 for x in range(heightField)] for y in range(widthField)]
-
 tileList = []
 tilenumber = 1
 for line in file:
@@ -109,3 +108,9 @@ for line in file:
 numberofsolutions = 0
 placeTile(tileList,coordinateList);
 print("Found %d solutions" % numberofsolutions)
+def printTiles(tiles):
+    x = 1
+    for tile in tiles:
+        print("Tile %d - %d x %d" % (x, tile.width, tile.height))
+        x += 1
+printTiles(tileList)
