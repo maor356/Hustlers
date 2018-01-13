@@ -60,13 +60,14 @@ def flip(tile):
     return Tile(tile.height, tile.width, tile.tilenumber);
 
 def placeTile(tiles, field):
-    printField(field)
+    global numberofsolutions;
     if isFull(field):
-        print("FOUND A SOLUTION")
+        numberofsolutions += 1
+        print("Solution %d" % numberofsolutions)
+        printField(field)
         return
     if(len(tiles) == 0):
         return
-    print("s - %d" % len(tiles))
     topLeft = findTopLeft(field)
     tilesc = list(tiles)
     fieldc = list(field)
@@ -77,21 +78,15 @@ def placeTile(tiles, field):
             placeTile(tilesc,newField);
             tilesc.append(tile)
         if(tile.width != tile.height):
-            print("!=")
             flippedTile = flip(tile)
             if(fits(flippedTile, field, topLeft)):
-                print("flipped fits")
                 newField = placeTile2(flippedTile, fieldc, topLeft)
                 tilesc.remove(tile)
                 placeTile(tilesc,newField);
                 tilesc.append(tile)
     return
 
-def printTiles(tiles):
-    for tile in tiles:
-        print("Tile - %d x %d\n" % (tile.width, tile.height))
-
-file = open("simple.tiles","r")
+file = open("mid.tiles","r")
 
 properties = file.readline().rstrip().split(" ")
 widthField = int(properties[1])
@@ -111,6 +106,6 @@ for line in file:
     for i in range(tileCount):
         tileList.append(Tile(width,height,tilenumber))
         tilenumber += 1
-
+numberofsolutions = 0
 placeTile(tileList,coordinateList);
-printTiles(tileList)
+print("Found %d solutions" % numberofsolutions)
