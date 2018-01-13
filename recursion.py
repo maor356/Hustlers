@@ -18,9 +18,6 @@ class Tile:
         self.height = int(height)
         self.tilenumber = int(tilenumber)
 
-def sum2darray(input):
-    return sum(map(sum, input))
-
 def printField(field):
     for y in range(len(field)):
         print("|", end = ""),
