@@ -11,34 +11,20 @@ from random import randint
 import copy
 
 class Tile:
-
     x = None
     y = None
-    sideWays = False
-    def __init__(self,width,height):
+    def __init__(self,width,height, tilenumber):
         self.width= int(width)
         self.height = int(height)
+        self.tilenumber = int(tilenumber)
 
-
-def checkLeftCorner(x,y,width,height):
-
-    if (int(x)+int(width) > widthField) or (int(x) < 0) or ((int(y)+int(height) > heightField) or (int(y)) < 0):
-        return False
-    for i in range(int(x),int(x)+int(width)):
-        for j in range(int(y),int(y)+int(height)):
-
-            if(coordinateList[i][j] == 1):
-                return False
-
-    return True
-def paintField(field,x,y,width,height):
-    for i in range(x,x+width):
-        for j in range(y,y+height):
-
-            field[i][j] = 1
-
-def sum2darray(input):
-    return sum(map(sum, input))
+def printField(field):
+    for y in range(len(field)):
+        print("|", end = ""),
+        for x in range(len(field[y])):
+            print("%d |" % field[y][x], end = "")
+        print("\n", end="")
+    return False;
 
 def findTopLeft(field):
     for y in range(len(field)):
@@ -51,42 +37,53 @@ def isFull(field):
     return findTopLeft(field) == False;
 
 def fits(tile, field, topLeft):
-    return (tile.width + topLeft[0] <= len(field) and tile.height + topLeft[1] <= len(field[0]))
+    a = tile.width + topLeft[0]  <= len(field[0])
+    b = tile.height + topLeft[1]  <= len(field)
+    return (a and b)
 
 def placeTile2(tile, field, topLeft):
-    for y in range(len(field)):
-        for x in range(len(field[y])):
-            a = x <= topLeft[0] + tile.width
+    newField = copy.deepcopy(field)
+    for y in range(len(newField)):
+        for x in range(len(newField[y])):
+            a = x <= topLeft[0] + tile.width - 1
             b = x >= topLeft[0]
-            c = y <= topLeft[1] + tile.height
+            c = y <= topLeft[1] + tile.height - 1
             d = y >= topLeft[1]
             if(a and b and c and d):
-                field[y][x] == 1
-    return field
+                newField[y][x] = tile.tilenumber
+    return newField
+
+def flip(tile):
+    return Tile(tile.height, tile.width, tile.tilenumber);
 
 def placeTile(tiles, field):
+    global numberofsolutions;
     if isFull(field):
-        print("FOUND A SOLUTION")
-        return;
-    print("a")
-
-    topLeft = findTopLeft(field);
-
+        numberofsolutions += 1
+        print("Solution %d" % numberofsolutions)
+        printField(field)
+        return
+    if(len(tiles) == 0):
+        return
+    topLeft = findTopLeft(field)
+    tilesc = list(tiles)
+    fieldc = list(field)
     for tile in tiles:
         if fits(tile, field, topLeft):
             newField = placeTile2(tile, field, topLeft)
-            placeTile(tiles.remove(tile),newField);
+            tilesc.remove(tile)
+            placeTile(tilesc,newField);
+            tilesc.append(tile)
+        if(tile.width != tile.height):
+            flippedTile = flip(tile)
+            if(fits(flippedTile, field, topLeft)):
+                newField = placeTile2(flippedTile, fieldc, topLeft)
+                tilesc.remove(tile)
+                placeTile(tilesc,newField);
+                tilesc.append(tile)
+    return
 
-            if(tile.width != tile.height):
-                flippedTile = flip(tile)
-                if(fits(flippedTile, field, topLeft)):
-                    newField = placeTile2(flippedTile, field, topLeft)
-                    # newTiles = tiles.remove(tile)
-                    placeTile(tiles,newField);
-
-file = open("simple.tiles","r")
-tileList = []
-
+file = open("example.tiles","r")
 
 properties = file.readline().rstrip().split(" ")
 widthField = int(properties[1])
@@ -94,7 +91,8 @@ heightField = int(properties[3])
 scaleField = int(properties[5])
 
 coordinateList = [[0 for x in range(heightField)] for y in range(widthField)]
-
+tileList = []
+tilenumber = 1
 for line in file:
     tileCount = int(line.split(" ")[0])
     widthAndHeight = line.split(" ")[2].split("x")
@@ -102,14 +100,14 @@ for line in file:
     height = widthAndHeight[1]
 
     for i in range(tileCount):
-        tileList.append(Tile(width,height))
-
-#random placement algorithm
-usedTiles = []
-unusedTiles = copy.deepcopy(tileList)
-notSolved = True
-placeable = True
-freshCoordinates = copy.deepcopy(coordinateList)
-maxReached = 0
-
-placeTile(unusedTiles,coordinateList);
+        tileList.append(Tile(width,height,tilenumber))
+        tilenumber += 1
+numberofsolutions = 0
+placeTile(tileList,coordinateList);
+print("Found %d solutions" % numberofsolutions)
+def printTiles(tiles):
+    x = 1
+    for tile in tiles:
+        print("Tile %d - %d x %d" % (x, tile.width, tile.height))
+        x += 1
+printTiles(tileList)
