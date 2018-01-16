@@ -37,8 +37,15 @@ def isFull(field):
     return findTopLeft(field) == False;
 
 def fits(tile, field, topLeft):
+   
     a = tile.width + topLeft[0]  <= len(field[0])
     b = tile.height + topLeft[1]  <= len(field)
+    
+    if (a and b):
+        for x in range(topLeft[0],tile.width+topLeft[0]):
+            for y in range(topLeft[1],tile.height+topLeft[1]):
+                if not (field[y][x] == 0):
+                    return False
     return (a and b)
 
 def placeTile2(tile, field, topLeft):
@@ -72,7 +79,7 @@ def placeTile(tiles, field):
     oldH = None
     
     for tile in tiles:
-        if not (tile.width == oldW) and not (tile.height == oldH):
+        if not (tile.width == oldW) and not (tile.height == oldH) and not (tile.height == oldW) and not (tile.width == oldH):
             oldW = tile.width
             oldH = tile.height
             if fits(tile, field, topLeft):
