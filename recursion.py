@@ -68,19 +68,26 @@ def placeTile(tiles, field):
     topLeft = findTopLeft(field)
     tilesc = list(tiles)
     fieldc = list(field)
+    oldW = None
+    oldH = None
+    
     for tile in tiles:
-        if fits(tile, field, topLeft):
-            newField = placeTile2(tile, field, topLeft)
-            tilesc.remove(tile)
-            placeTile(tilesc,newField);
-            tilesc.append(tile)
-        if(tile.width != tile.height):
-            flippedTile = flip(tile)
-            if(fits(flippedTile, field, topLeft)):
-                newField = placeTile2(flippedTile, fieldc, topLeft)
+        if not (tile.width == oldW) and not (tile.height == oldH):
+            oldW = tile.width
+            oldH = tile.height
+            if fits(tile, field, topLeft):
+                newField = placeTile2(tile, field, topLeft)
                 tilesc.remove(tile)
                 placeTile(tilesc,newField);
                 tilesc.append(tile)
+            if(tile.width != tile.height):
+                flippedTile = flip(tile)
+                if(fits(flippedTile, field, topLeft)):
+                    newField = placeTile2(flippedTile, fieldc, topLeft)
+                    tilesc.remove(tile)
+                    placeTile(tilesc,newField);
+                    tilesc.append(tile)
+        
     return
 
 file = open("example.tiles","r")
