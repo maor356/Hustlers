@@ -1,13 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jan 10 14:33:06 2018
-
-@author: Rens
-"""
-try: import pylab
-except ImportError: pylab_installed = False
-else: pylab_installed = True
-from random import randint
+import time
 import copy
 
 class Tile:
@@ -37,10 +28,10 @@ def isFull(field):
     return findTopLeft(field) == False;
 
 def fits(tile, field, topLeft):
-   
+
     a = tile.width + topLeft[0]  <= len(field[0])
     b = tile.height + topLeft[1]  <= len(field)
-    
+
     if (a and b):
         for x in range(topLeft[0],tile.width+topLeft[0]):
             for y in range(topLeft[1],tile.height+topLeft[1]):
@@ -63,23 +54,23 @@ def placeTile2(tile, field, topLeft):
 def flip(tile):
     return Tile(tile.height, tile.width, tile.tilenumber);
 def checkMinWidth(field,tileList):
-    
+
     empty = [[0 for col in range(len(field[0]))] for row in range(len(field))]
-   
+
     for y in range(len(field)):
         for i in range(0,len(field[0])):
-          
 
-            
+
+
             if field[y][i] == 0:
                 empty[y][i] = empty[y][i-1] + 1
             else:
                 empty[y][i] = 0
-    
+
     minWidth = min(max(empty))
-   
+
     maxWidth= max(max(empty))
-    
+
     smallestFits = False
     biggestFits = True
     for tile in tileList:
@@ -87,7 +78,7 @@ def checkMinWidth(field,tileList):
              smallestFits = True
          if (min(tile.width,tile.height) > maxWidth):
              biggestFits = False
-   
+
     if (smallestFits) and (biggestFits):
         return True
 def placeTile(tiles, field):
@@ -122,10 +113,10 @@ def placeTile(tiles, field):
                     tilesc.remove(tile)
                     placeTile(tilesc,newField);
                     tilesc.append(tile)
-        
+
     return
 
-file = open("example.tiles","r")
+file = open("tilings/15-0-0.tiles","r")
 
 properties = file.readline().rstrip().split(" ")
 widthField = int(properties[1])
@@ -145,7 +136,11 @@ for line in file:
         tileList.append(Tile(width,height,tilenumber))
         tilenumber += 1
 numberofsolutions = 0
+
+start_time = time.time()
 placeTile(tileList,coordinateList);
+run_time = time.time() - start_time
+
 print("Found %d solutions" % numberofsolutions)
 def printTiles(tiles):
     x = 1
@@ -153,3 +148,4 @@ def printTiles(tiles):
         print("Tile %d - %d x %d" % (x, tile.width, tile.height))
         x += 1
 printTiles(tileList)
+print("--- %s seconds ---" % run_time)
