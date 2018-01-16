@@ -4,11 +4,12 @@ Created on Wed Jan 10 14:33:06 2018
 
 @author: Rens
 """
-try: import pylab
-except ImportError: pylab_installed = False
-else: pylab_installed = True
+
 from random import randint
 import copy
+import os
+from colored import fg,bg
+ 
 
 class Tile:
     x = None
@@ -22,8 +23,8 @@ def printField(field):
     for y in range(len(field)):
         print("|", end = ""),
         for x in range(len(field[y])):
-            print("%d |" % field[y][x], end = "")
-        print("\n", end="")
+            print('%s%2d|' % (fg(field[y][x]),field[y][x]), end = "")
+        print("\n%s" % (fg('black')), end="")
     return False;
 
 def findTopLeft(field):
@@ -91,10 +92,17 @@ def checkMinWidth(field,tileList):
     if (smallestFits) and (biggestFits):
         return True
 def placeTile(tiles, field):
+    
     global numberofsolutions;
+    global stepsTaken
+    stepsTaken += 1
+    
+    
     if isFull(field):
+        solutions.append(field)
         numberofsolutions += 1
-        print("Solution %d" % numberofsolutions)
+      
+        print("Solution %d steps: %d" % (numberofsolutions,stepsTaken))
         printField(field)
         return
     if(len(tiles) == 0):
@@ -125,7 +133,11 @@ def placeTile(tiles, field):
         
     return
 
+
+    
 file = open("tilings/15-0-0.tiles","r")
+solutions = []
+stepsTaken = 0
 
 properties = file.readline().rstrip().split(" ")
 widthField = int(properties[1])
@@ -144,6 +156,9 @@ for line in file:
     for i in range(tileCount):
         tileList.append(Tile(width,height,tilenumber))
         tilenumber += 1
+
+
+
 numberofsolutions = 0
 placeTile(tileList,coordinateList);
 print("Found %d solutions" % numberofsolutions)
@@ -153,3 +168,4 @@ def printTiles(tiles):
         print("Tile %d - %d x %d" % (x, tile.width, tile.height))
         x += 1
 printTiles(tileList)
+
