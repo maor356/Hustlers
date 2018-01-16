@@ -62,7 +62,34 @@ def placeTile2(tile, field, topLeft):
 
 def flip(tile):
     return Tile(tile.height, tile.width, tile.tilenumber);
+def checkMinWidth(field,tileList):
+    
+    empty = [[0 for col in range(len(field[0]))] for row in range(len(field))]
+   
+    for y in range(len(field)):
+        for i in range(0,len(field[0])):
+          
 
+            
+            if field[y][i] == 0:
+                empty[y][i] = empty[y][i-1] + 1
+            else:
+                empty[y][i] = 0
+    
+    minWidth = min(max(empty))
+   
+    maxWidth= max(max(empty))
+    
+    smallestFits = False
+    biggestFits = True
+    for tile in tileList:
+         if (min(tile.width,tile.height) >= minWidth):
+             smallestFits = True
+         if (min(tile.width,tile.height) > maxWidth):
+             biggestFits = False
+   
+    if (smallestFits) and (biggestFits):
+        return True
 def placeTile(tiles, field):
     global numberofsolutions;
     if isFull(field):
@@ -77,7 +104,8 @@ def placeTile(tiles, field):
     fieldc = list(field)
     oldW = None
     oldH = None
-    
+    if not (checkMinWidth(field,tiles)):
+        return
     for tile in tiles:
         if not (tile.width == oldW) and not (tile.height == oldH) and not (tile.height == oldW) and not (tile.width == oldH):
             oldW = tile.width
