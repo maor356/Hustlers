@@ -126,7 +126,7 @@ def checkMinHeight(field,tileList):
     if (smallestFits) and (biggestFits):
         return True     
 def placeTile(tiles, field):
-    
+
     global numberofsolutions;
     global stepsTaken
     stepsTaken += 1
@@ -137,7 +137,7 @@ def placeTile(tiles, field):
         numberofsolutions += 1
       
         print("Solution %d steps: %d" % (numberofsolutions,stepsTaken))
-        #printField(field)
+        printField(field)
         return
     if(len(tiles) == 0):
         return
@@ -149,10 +149,9 @@ def placeTile(tiles, field):
     if not (checkMinWidth(field,tiles)):
         return
     elif not (checkMinHeight(field,tiles)):
-        
         return
     for tile in tiles:
-        if not (tile.width == oldW) and not (tile.height == oldH) and not (tile.height == oldW) and not (tile.width == oldH):
+        if not (tile.width == oldW) and not (tile.height == oldH) or not (tile.height == oldW) and not (tile.width == oldH):
             oldW = tile.width
             oldH = tile.height
             if fits(tile, field, topLeft):

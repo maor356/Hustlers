@@ -132,7 +132,7 @@ def placeTile(tiles, field):
     elif not (checkMinHeight(field,tiles)):
         return
     for tile in tiles:
-        if not (tile.width == oldW) and not (tile.height == oldH) and not (tile.height == oldW) and not (tile.width == oldH):
+        if not (tile.width == oldW) and not (tile.height == oldH) or not (tile.height == oldW) and not (tile.width == oldH):
             oldW = tile.width
             oldH = tile.height
             if fits(tile, field, topLeft):
