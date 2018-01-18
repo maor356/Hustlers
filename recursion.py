@@ -157,7 +157,7 @@ widthField = int(properties[1])
 heightField = int(properties[3])
 scaleField = int(properties[5])
 
-coordinateList = [[0 for x in range(heightField)] for y in range(widthField)]
+coordinateList = [[0 for x in range(widthField)] for y in range(heightField)]
 tileList = []
 tilenumber = 1
 for line in file:
