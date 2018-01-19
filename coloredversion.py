@@ -1,15 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jan 10 14:33:06 2018
-
-@author: Rens
-"""
-
-from random import randint
 import copy
-import os
-from colored import fg,bg
- 
+from colored import fg,bg, attr
 
 class Tile:
     x = None
@@ -144,9 +134,8 @@ def placeTile(tiles, field):
     if isFull(field):
         solutions.append(field)
         numberofsolutions += 1
-      
         print("Solution %d steps: %d" % (numberofsolutions,stepsTaken))
- #       printField(field)
+        printField(field)
         return
     if(len(tiles) == 0):
         return
@@ -167,15 +156,13 @@ def placeTile(tiles, field):
                 newField = placeTile2(tile, field, topLeft)
                 tilesc.remove(tile)
                 placeTile(tilesc,newField);
-                tilesc.append(tile)
+                tilesc = list(tiles)
             if(tile.width != tile.height):
                 flippedTile = flip(tile)
                 if(fits(flippedTile, field, topLeft)):
                     newField = placeTile2(flippedTile, fieldc, topLeft)
                     tilesc.remove(tile)
                     placeTile(tilesc,newField);
-                    tilesc.append(tile)
-        
     return
 
 
@@ -208,9 +195,6 @@ numberofsolutions = 0
 placeTile(tileList,coordinateList);
 print("Found %d solutions" % numberofsolutions)
 def printTiles(tiles):
-    x = 1
     for tile in tiles:
-        print("Tile %d - %d x %d" % (x, tile.width, tile.height))
-        x += 1
+        print("Tile %d - %d x %d" % (tile.tilenumber, tile.width, tile.height))
 printTiles(tileList)
-
