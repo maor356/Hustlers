@@ -20,11 +20,20 @@ class Tile:
         self.tilenumber = int(tilenumber)
 
 def printField(field):
+    for x in range(len(field[0])):
+        print("%s%3s" % (attr("reset"),"-"),end="")
+    print("")
     for y in range(len(field)):
-        print("|", end = ""),
+        print("%s|" % attr("reset"), end = ""),
         for x in range(len(field[y])):
-            print('%s%2d|' % (fg(field[y][x]),field[y][x]), end = "")
+            if (x == (len(field[y]) - 1)):
+                    print('%s%s%2d%s|' % (bg(field[y][x]),fg(field[y][x]+3),field[y][x],attr("reset")), end = "")
+            else:
+                print('%s%s%2d|' % (bg(field[y][x]),fg(field[y][x]+3),field[y][x]), end = "")
         print("\n%s" % (fg('black')), end="")
+    for x in range(len(field[0])):
+         print("%s%3s" % (attr("reset"),"-"),end="")
+    print("")
     return False;
 
 def findTopLeft(field):
@@ -137,7 +146,7 @@ def placeTile(tiles, field):
         numberofsolutions += 1
       
         print("Solution %d steps: %d" % (numberofsolutions,stepsTaken))
-        printField(field)
+ #       printField(field)
         return
     if(len(tiles) == 0):
         return
@@ -171,7 +180,7 @@ def placeTile(tiles, field):
 
 
     
-file = open("example.tiles","r")
+file = open("tileset1.tiles","r")
 solutions = []
 stepsTaken = 0
 
