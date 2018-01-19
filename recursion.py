@@ -169,7 +169,7 @@ for line in file:
     for i in range(tileCount):
         tileList.append(Tile(width,height,tilenumber))
         tilenumber += 1
-tileList = list(reversed(tileList)) #sort from big to small
+
 numberofsolutions = 0
 
 start_time = time.time()
