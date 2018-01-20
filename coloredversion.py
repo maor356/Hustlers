@@ -63,69 +63,113 @@ def placeTile2(tile, field, topLeft):
 def flip(tile):
     return Tile(tile.height, tile.width, tile.tilenumber);
 def checkMinWidth(field,tileList):
-    
-    empty = [[0 for col in range(len(field[0]))] for row in range(len(field))]
-   
+    minWidths = []
+    maxWidths = []
     for y in range(len(field)):
-        for i in range(0,len(field[0])):
-          
+        same = 0
+        minSame = len(field[0])
+        maxSame = 0
+        for x in range(len(field[0])):
+           
+            if (field[y][x] == 0):
+                
+                same += 1
+                
+            elif (same > 0):
+               
+                if (minSame > same):
+                    minSame = same
+                if (maxSame < same):
+                    maxSame = same            
+                same = 0
+                
+                
+        if(same > 0):
+            if (minSame > same):
+                    minSame = same
+            if (maxSame < same):
+                    maxSame = same
+        if(minSame > 0):
+            minWidths.append(minSame)
+            maxWidths.append(maxSame)
+                
+                
 
-            
-            if field[y][i] == 0:
-                empty[y][i] = empty[y][i-1] + 1
-            else:
-                empty[y][i] = 0
-    
-    minWidth = min(max(empty))
+    minWidth = min(minWidths)
    
-    maxWidth= max(max(empty))
+    maxWidth= max(maxWidths)
+    
+    
     
     smallestFits = False
-    biggestFits = True
+    biggestFits = False
+    
     for tile in tileList:
-         if (min(tile.width,tile.height) >= minWidth):
+         if (min(tile.width,tile.height) <= minWidth):
              smallestFits = True
-         if (min(tile.width,tile.height) > maxWidth):
-             biggestFits = False
+         if (min(tile.width,tile.height) <= maxWidth):
+             biggestFits = True
    
+    
     if (smallestFits) and (biggestFits):
+        
         return True
     
 def checkMinHeight(field,tileList):
     
     rotated = list(zip(*field[::-1]))
-
-    empty = [[0 for col in range(len(rotated[0]))] for row in range(len(rotated))]
-
+    
+    minHeights = []
+    maxHeights = []
     for y in range(len(rotated)):
-        for i in range(0,len(rotated[0])):
+        same = 0
+        minSame = len(rotated[0])
+        maxSame = 0
+        for x in range(len(rotated[0])):
+           
+            if (rotated[y][x] == 0):
+                
+                same += 1
+                
+            elif (same > 0):
+               
+                if (minSame > same):
+                    minSame = same
+                if (maxSame < same):
+                    maxSame = same            
+                same = 0
+                
+                
+        if(same > 0):
+            if (minSame > same):
+                    minSame = same
+            if (maxSame < same):
+                    maxSame = same
+        if(minSame > 0):
+            minHeights.append(minSame)
+            maxHeights.append(maxSame)
+                
 
 
 
-            if rotated[y][i] == 0:
-                empty[y][i] = empty[y][i-1] + 1
-            else:
-                empty[y][i] = 0
 
+    minHeight = min(minHeights)
 
+    maxHeight = max(maxHeights)
 
-    minHeight = min(max(empty))
-
-    maxHeight = max(max(empty))
-   
     
     smallestFits = False
-    biggestFits = True
+    biggestFits = False
     for tile in tileList:
-         if (min(tile.width,tile.height) >= minHeight):
+         if (min(tile.width,tile.height) <= minHeight):
              smallestFits = True
-         if (min(tile.width,tile.height) > maxHeight):
-             biggestFits = False
+         if (min(tile.width,tile.height) <= maxHeight):
+             biggestFits = True
             
     if (smallestFits) and (biggestFits):
         return True     
 def placeTile(tiles, field):
-
+    
     global numberofsolutions;
     global stepsTaken
     stepsTaken += 1
@@ -145,29 +189,34 @@ def placeTile(tiles, field):
     oldW = None
     oldH = None
     if not (checkMinWidth(field,tiles)):
+        
         return
     elif not (checkMinHeight(field,tiles)):
+       
         return
     for tile in tiles:
-        if not (tile.width == oldW) and not (tile.height == oldH) or not (tile.height == oldW) and not (tile.width == oldH):
-            oldW = tile.width
-            oldH = tile.height
-            if fits(tile, field, topLeft):
-                newField = placeTile2(tile, field, topLeft)
-                tilesc.remove(tile)
-                placeTile(tilesc,newField);
-                tilesc = list(tiles)
-            if(tile.width != tile.height):
-                flippedTile = flip(tile)
-                if(fits(flippedTile, field, topLeft)):
-                    newField = placeTile2(flippedTile, fieldc, topLeft)
+
+        if not ((tile.width == oldW) and (tile.height == oldH)) or not ((tile.height == oldW) and (tile.width == oldH)):
+                
+                oldW = tile.width
+                oldH = tile.height
+                if fits(tile, field, topLeft):
+                    newField = placeTile2(tile, field, topLeft)
                     tilesc.remove(tile)
                     placeTile(tilesc,newField);
+                    tilesc = list(tiles)
+                if(tile.width != tile.height):
+                    flippedTile = flip(tile)
+                    if(fits(flippedTile, field, topLeft)):
+                        newField = placeTile2(flippedTile, fieldc, topLeft)
+                        tilesc.remove(tile)
+                        placeTile(tilesc,newField);
+                        tilesc = list(tiles)
     return
 
 
     
-file = open("tileset1.tiles","r")
+file = open("tileset2.tiles","r")
 solutions = []
 stepsTaken = 0
 
