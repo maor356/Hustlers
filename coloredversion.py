@@ -216,7 +216,7 @@ def placeTile(tiles, field):
 
 
     
-file = open("tileset3.tiles","r")
+file = open("tileset2.tiles","r")
 solutions = []
 stepsTaken = 0
 
