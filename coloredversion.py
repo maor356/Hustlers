@@ -2,8 +2,6 @@ import copy
 from colored import fg,bg, attr
 
 class Tile:
-    x = None
-    y = None
     def __init__(self,width,height, tilenumber):
         self.width= int(width)
         self.height = int(height)
@@ -140,8 +138,6 @@ def placeTile(tiles, field):
     if(len(tiles) == 0):
         return
     topLeft = findTopLeft(field)
-    tilesc = list(tiles)
-    fieldc = list(field)
     oldW = None
     oldH = None
     if not (checkMinWidth(field,tiles)):
@@ -149,19 +145,18 @@ def placeTile(tiles, field):
     elif not (checkMinHeight(field,tiles)):
         return
     for tile in tiles:
-        if not (tile.width == oldW) and not (tile.height == oldH) or not (tile.height == oldW) and not (tile.width == oldH):
+        if not ((tile.width == oldW and tile.height == oldH) or (tile.height == oldW and tile.width == oldH)):
             oldW = tile.width
             oldH = tile.height
+            tilesc = list(tiles)
+            tilesc.remove(tile)
             if fits(tile, field, topLeft):
                 newField = placeTile2(tile, field, topLeft)
-                tilesc.remove(tile)
                 placeTile(tilesc,newField);
-                tilesc = list(tiles)
             if(tile.width != tile.height):
                 flippedTile = flip(tile)
                 if(fits(flippedTile, field, topLeft)):
-                    newField = placeTile2(flippedTile, fieldc, topLeft)
-                    tilesc.remove(tile)
+                    newField = placeTile2(flippedTile, field, topLeft)
                     placeTile(tilesc,newField);
     return
 
