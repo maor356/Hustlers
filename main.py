@@ -43,7 +43,7 @@ def sum2darray(input):
     return sum(map(sum, input))
 
 
-file = open("simple.tiles","r") 
+file = open("mid.tiles","r")
 tileList = []
 
 
