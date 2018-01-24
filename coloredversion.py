@@ -1,7 +1,8 @@
 import copy
 import time
 from colored import fg,bg, attr
-
+import os
+os.system("")
 start = time.time()
 class Tile:
     x = None
@@ -64,6 +65,47 @@ def placeTile2(tile, field, topLeft):
 
 def flip(tile):
     return Tile(tile.height, tile.width, tile.tilenumber);
+
+def smallestValley(field):
+  
+    coords = []
+    for y in range(len(field)):
+        same = 0
+        minSame = len(field[0])
+       
+        for x in range(len(field[0])):
+           
+            if (field[y][x] == 0):
+                
+                same += 1
+                
+            elif (same > 0):
+               
+                if (minSame > same):
+                    minSame = same
+                    coords.append((minSame,x-1,y))        
+                same = 0
+                
+                
+        if(same > 0):
+            
+            if (minSame > same):
+                    minSame = same
+                    
+        if(minSame > 0):
+            
+            coords.append((minSame,x,y))  
+                
+                
+
+    sortedBySize = sorted(coords, key=lambda tup: tup[0])
+   
+    x = (sortedBySize[0][1]-sortedBySize[0][0]+1)
+    y = (sortedBySize[0][2])
+    return(x,y)
+    
+    
+    
 def checkMinWidth(field,tileList):
     minWidths = []
     maxWidths = []
@@ -175,8 +217,9 @@ def placeTile(tiles, field):
     global numberofsolutions;
     global stepsTaken
     stepsTaken += 1
-    
-    
+    if (numberofsolutions == 1):
+        return
+   # printField(field)
     if isFull(field):
         solutions.append(field)
         numberofsolutions += 1
@@ -185,7 +228,8 @@ def placeTile(tiles, field):
         return
     if(len(tiles) == 0):
         return
-    topLeft = findTopLeft(field)
+    #topLeft = findTopLeft(field)
+    topLeft = smallestValley(field)
     tilesc = list(tiles)
     fieldc = list(field)
     oldW = None
@@ -218,7 +262,7 @@ def placeTile(tiles, field):
 
 
     
-file = open("simple.tiles","r")
+file = open("tilings/15-0-0.tiles","r")
 solutions = []
 stepsTaken = 0
 properties = file.readline().rstrip().split(" ")
