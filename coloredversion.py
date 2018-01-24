@@ -249,9 +249,9 @@ def placeTile(tiles, field):
     global stepsTaken
     stepsTaken += 1 
     
-    #**** hole[0] = area
-    #**** hole[1] = heigth
-    #**** hole[2] = width
+    #**** emptySpace[0] = area
+    #**** emptySpace[1] = heigth
+    #**** emptySpace[2] = width
     emptySpace = findArea(tiles,field)
     #***********************************************************************
     
