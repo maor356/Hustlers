@@ -30,6 +30,39 @@ def printField(field):
     print("")
     return False;
 
+def findArea(tiles,field):
+    if(len(tiles)<1):
+        return
+    zeros = list()
+    for y in range(len(field)):
+        if (0 in field[y]):
+            get_indexes = lambda x, xs: [i for (y, i) in zip(xs, range(len(xs))) if x == y]
+            zeros.append(get_indexes(0,field[y]))
+    if(len(zeros)<1):
+        return
+    marker = zeros[0]
+    if(len(marker)<tiles[-1].width*2):
+        width = len(marker)
+        heigth = 1
+        for row in zeros:
+            if(not marker == row):
+                markerStr = str(marker)[1:-1]
+                rowStr = str(row)[1:-1]
+                if (markerStr in rowStr):
+                    if((marker[0]-1 in row) or (marker[-1]+1 in row)):
+               #         print("Area= " + str(height*width))
+                        return [heigth*width,heigth,width];
+                    else:
+              #          print ("Height " + str(height))
+                        heigth = heigth + 1;
+             #           print ("Height " + str(height))
+            else:
+                heigth = heigth + 1;
+            #print (row)
+            #print ("Height " + str(height))
+            #print(heigth)
+        return [heigth*width,heigth,width];
+                         
 def findTopLeft(field):
     for y in range(len(field)):
         if (0 in field[y]):
@@ -94,9 +127,7 @@ def smallestValley(field):
                     
         if(minSame > 0):
             
-            coords.append((minSame,x,y))  
-                
-                
+            coords.append((minSame,x,y))     
 
     sortedBySize = sorted(coords, key=lambda tup: tup[0])
    
@@ -216,9 +247,16 @@ def placeTile(tiles, field):
     
     global numberofsolutions;
     global stepsTaken
-    stepsTaken += 1
-    if (numberofsolutions == 1):
-        return
+    stepsTaken += 1 
+    
+    #**** hole[0] = area
+    #**** hole[1] = heigth
+    #**** hole[2] = width
+    emptySpace = findArea(tiles,field)
+    #***********************************************************************
+    
+    #  if (numberofsolutions == 1):
+     #   return
    # printField(field)
     if isFull(field):
         solutions.append(field)
@@ -262,7 +300,7 @@ def placeTile(tiles, field):
 
 
     
-file = open("tilings/15-0-0.tiles","r")
+file = open("tileset1.tiles","r")
 solutions = []
 stepsTaken = 0
 properties = file.readline().rstrip().split(" ")
