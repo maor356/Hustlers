@@ -43,7 +43,7 @@ def findArea(tiles,field):
     marker = zeros[0]
     if(len(marker)<tiles[-1].width*2):
         width = len(marker)
-        heigth = 1
+        heigth = 0
         for row in zeros:
             if(not marker == row):
                 markerStr = str(marker)[1:-1]
@@ -254,7 +254,8 @@ def placeTile(tiles, field):
     #**** emptySpace[2] = width
     emptySpace = findArea(tiles,field)
     #***********************************************************************
-    
+    printField(field)
+    print(emptySpace)
     #  if (numberofsolutions == 1):
      #   return
    # printField(field)
