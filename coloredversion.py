@@ -2,6 +2,7 @@ import copy
 import time
 from colored import fg,bg, attr
 import os
+import math
 os.system("")
 start = time.time()
 class Tile:
@@ -30,7 +31,16 @@ def printField(field):
     print("")
     return False;
 
+def check1TileInQuarter(x,y,field):
+    maxFieldX = math.ceil(len(field[0])/2)
+    maxFieldY = math.ceil(len(field)/2)
+    
+    if (x > maxFieldX) or (y > maxFieldY):
+        return False
+    else:
+        return True
 def findArea(tiles,field):
+    
     if(len(tiles)<1):
         return
     zeros = list()
@@ -38,6 +48,7 @@ def findArea(tiles,field):
         if (0 in field[y]):
             get_indexes = lambda x, xs: [i for (y, i) in zip(xs, range(len(xs))) if x == y]
             zeros.append(get_indexes(0,field[y]))
+            
     if(len(zeros)<1):
         return
     marker = zeros[0]
@@ -51,7 +62,7 @@ def findArea(tiles,field):
                 if (markerStr in rowStr):
                     if((marker[0]-1 in row) or (marker[-1]+1 in row)):
                #         print("Area= " + str(height*width))
-                        return [heigth*width,heigth,width];
+                        return [heigth*width,heigth,width,False];
                     else:
               #          print ("Height " + str(height))
                         heigth = heigth + 1;
@@ -61,7 +72,7 @@ def findArea(tiles,field):
             #print (row)
             #print ("Height " + str(height))
             #print(heigth)
-        return [heigth*width,heigth,width];
+        return [heigth*width,heigth,width,True];
                          
 def findTopLeft(field):
     for y in range(len(field)):
@@ -74,7 +85,9 @@ def isFull(field):
     return findTopLeft(field) == False;
     
 def fits(tile, field, topLeft):
-
+    if (tile.tilenumber == 1):
+        if (check1TileInQuarter(topLeft[0],topLeft[1],field) == False):
+            return False
     a = tile.width + topLeft[0]  <= len(field[0])
     b = tile.height + topLeft[1]  <= len(field)
     
@@ -243,8 +256,49 @@ def checkMinHeight(field,tileList):
             
     if (smallestFits) and (biggestFits):
         return True     
-def placeTile(tiles, field):
+def printTiles(tiles):
+    for tile in tiles:
+        print("Tile %d - %d x %d" % (tile.tilenumber, tile.width, tile.height))
+        
+def checkFitArea(areaInput,tiles):
+    areaSmall = areaInput[0]
+    heightSmall = areaInput[1]
+    widthSmall = areaInput[2]
+    top = areaInput[3]
+    fittingTiles = []
+    sumWidth = []
+    sumHeight = []
+    for tile in tiles:
+        if (top == True):
+            if (max(tile.width,tile.height) <= widthSmall and min(tile.width,tile.height) <= heightSmall) :
+                fittingTiles.append(tile)
+                sumWidth.append(max(tile.width,tile.height))
+                sumHeight.append(min(tile.width,tile.height))
+            elif (max(tile.width,tile.height) <= heightSmall and min(tile.width,tile.height) <= widthSmall):   
+                fittingTiles.append(tile)
+                sumWidth.append(min(tile.width,tile.height))
+                sumHeight.append(max(tile.width,tile.height))
+        else:
+             if (max(tile.width,tile.height) <= widthSmall) :
+                fittingTiles.append(tile)
+                sumWidth.append(min(tile.width,tile.height))
+                sumHeight.append(max(tile.width,tile.height))
+             elif (min(tile.width,tile.height) <= widthSmall) :
+                fittingTiles.append(tile)
+                sumWidth.append(max(tile.width,tile.height))
+                sumHeight.append(min(tile.width,tile.height))
+    if (len(fittingTiles) == 0):
+        return False
     
+    if (sum(sumWidth) < widthSmall):
+      
+        return False
+    if (sum(sumHeight) < heightSmall):
+
+        return False
+
+def placeTile(tiles, field):
+
     global numberofsolutions;
     global stepsTaken
     stepsTaken += 1 
@@ -252,18 +306,18 @@ def placeTile(tiles, field):
     #**** emptySpace[0] = area
     #**** emptySpace[1] = heigth
     #**** emptySpace[2] = width
-    emptySpace = findArea(tiles,field)
+    
     #***********************************************************************
-    printField(field)
-    print(emptySpace)
-    #  if (numberofsolutions == 1):
-     #   return
+
+
+#    if (numberofsolutions == 1):
+#        return
    # printField(field)
     if isFull(field):
         solutions.append(field)
         numberofsolutions += 1
         print("Solution %d steps: %d" % (numberofsolutions,stepsTaken))
-        printField(field)
+        
         return
     if(len(tiles) == 0):
         return
@@ -279,7 +333,14 @@ def placeTile(tiles, field):
     elif not (checkMinHeight(field,tiles)):
        
         return
-    
+    emptySpace = findArea(tiles,field)
+    if (emptySpace):
+        if (checkFitArea(emptySpace,tiles) == False): 
+            
+            
+           # printField(field)
+
+            return
     for tile in tiles:
 	
         if not ((tile.width == oldW) and (tile.height == oldH)) or not ((tile.height == oldW) and (tile.width == oldH)):
@@ -326,9 +387,7 @@ for line in file:
 numberofsolutions = 0
 placeTile(tileList,coordinateList);
 print("Found %d solutions" % numberofsolutions)
-def printTiles(tiles):
-    for tile in tiles:
-        print("Tile %d - %d x %d" % (tile.tilenumber, tile.width, tile.height))
+
 printTiles(tileList)
 end = time.time()
 print(end - start)      
