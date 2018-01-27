@@ -111,23 +111,30 @@ def flip(tile):
 
 def smallestValley(field):
     coords = []
+
     for y in range(len(field)):
         same = 0
         minSame = len(field[0])
+        
         for x in range(len(field[0])):
+            
             if (field[y][x] == 0):
                 same += 1
             elif (same > 0):
-                if (minSame > same):
+                if (minSame >= same):
                     minSame = same
+                    
                     coords.append((minSame,x-1,y))
                 same = 0
+        
         if(same > 0):
-            if (minSame > same):
+            if (minSame >= same):
                     minSame = same
-        if(minSame > 0):
-            coords.append((minSame,x,y))
+                    coords.append((minSame,x,y))
+
+    
     sortedBySize = sorted(coords, key=lambda tup: tup[0])
+    
     x = (sortedBySize[0][1]-sortedBySize[0][0]+1)
     y = (sortedBySize[0][2])
     return(x,y)
@@ -274,7 +281,7 @@ def placeTile(tiles, field):
 
 #    if (numberofsolutions == 1):
 #        return
-   # printField(field)
+#    printField(field)
     if isFull(field):
         solutions.append(field)
         numberofsolutions += 1
@@ -285,17 +292,19 @@ def placeTile(tiles, field):
         return
     #topLeft = findTopLeft(field)
     topLeft = smallestValley(field)
+    print(topLeft)
     oldW = None
     oldH = None
     if not (checkMinWidth(field,tiles)):
-
+        print("Here")
         return
     elif not (checkMinHeight(field,tiles)):
-
+        print("HereHeight")
         return
     emptySpace = findArea(tiles,field)
     if (emptySpace):
         if (checkFitArea(emptySpace,tiles) == False):
+            print("HereArea")
            # printField(field)
             return
     for tile in tiles:
@@ -314,7 +323,7 @@ def placeTile(tiles, field):
                         placeTile(tilesc,newField);
     return
 
-file = open("tileset1.tiles","r")
+file = open("example.tiles","r")
 solutions = []
 stepsTaken = 0
 properties = file.readline().rstrip().split(" ")
