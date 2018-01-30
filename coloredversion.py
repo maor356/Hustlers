@@ -252,12 +252,12 @@ def checkFitArea(areaInput,tiles):
              
              if (max(tile.width,tile.height) <= widthSmall) :
                 fittingTiles.append(tile)
-                sumWidth.append(max(tile.width,tile.height))
-                sumHeight.append(min(tile.width,tile.height))
-             elif (min(tile.width,tile.height) <= widthSmall) :
-                fittingTiles.append(tile)
                 sumWidth.append(min(tile.width,tile.height))
                 sumHeight.append(max(tile.width,tile.height))
+             elif (min(tile.width,tile.height) <= widthSmall) :
+                fittingTiles.append(tile)
+                sumWidth.append(max(tile.width,tile.height))
+                sumHeight.append(min(tile.width,tile.height))
                 
     if (len(fittingTiles) == 0):
         

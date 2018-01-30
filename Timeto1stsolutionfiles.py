@@ -211,12 +211,12 @@ def checkFitArea(areaInput,tiles):
         else:
              if (max(tile.width,tile.height) <= widthSmall) :
                 fittingTiles.append(tile)
-                sumWidth.append(max(tile.width,tile.height))
-                sumHeight.append(min(tile.width,tile.height))
-             elif (min(tile.width,tile.height) <= widthSmall) :
-                fittingTiles.append(tile)
                 sumWidth.append(min(tile.width,tile.height))
                 sumHeight.append(max(tile.width,tile.height))
+             elif (min(tile.width,tile.height) <= widthSmall) :
+                fittingTiles.append(tile)
+                sumWidth.append(max(tile.width,tile.height))
+                sumHeight.append(min(tile.width,tile.height))
     if (len(fittingTiles) == 0):
         return False
     
@@ -315,7 +315,7 @@ times = []
 
 
 for filename in os.listdir('tilings'):
-        file = open("tilings\\55-0-0.tiles","r")           
+        file = open("tilings\\"+filename,"r")           
 
         solutions = []
         stepsTaken = 0
