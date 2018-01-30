@@ -211,12 +211,12 @@ def checkFitArea(areaInput,tiles):
         else:
              if (max(tile.width,tile.height) <= widthSmall) :
                 fittingTiles.append(tile)
-                sumWidth.append(min(tile.width,tile.height))
-                sumHeight.append(max(tile.width,tile.height))
-             elif (min(tile.width,tile.height) <= widthSmall) :
-                fittingTiles.append(tile)
                 sumWidth.append(max(tile.width,tile.height))
                 sumHeight.append(min(tile.width,tile.height))
+             elif (min(tile.width,tile.height) <= widthSmall) :
+                fittingTiles.append(tile)
+                sumWidth.append(min(tile.width,tile.height))
+                sumHeight.append(max(tile.width,tile.height))
     if (len(fittingTiles) == 0):
         return False
     
@@ -264,7 +264,8 @@ def findArea(tiles,field):
         return [heigth*width,heigth,width,True];
                         
 def placeTile(tiles, field):
-    global numberofsolutions, stepsTaken;
+    global numberofsolutions, stepsTaken,start_time;
+
     stepsTaken += 1
     if (numberofsolutions >= 1):
         return
@@ -279,18 +280,21 @@ def placeTile(tiles, field):
         return
 
     topLeft = smallestValley(field)
+    #topLeft = findTopLeft(field)
     oldW = None
     oldH = None
-
+    
+    emptySpace = findArea(tiles,field)
+    if (emptySpace):
+        if (checkFitArea(emptySpace,tiles) == False):
+           
+           return
     if not (checkMinWidth(field,tiles)):
         return
 
-    elif not (checkMinHeight(field,tiles)):
+    if not (checkMinHeight(field,tiles)):
         return
-    emptySpace = findArea(tiles,field)
-    if (emptySpace):
-        if (checkFitArea(emptySpace,tiles) == False):   
-            return
+
     for tile in tiles:
         if not ((tile.width == oldW) and (tile.height == oldH)) or not ((tile.height == oldW) and (tile.width == oldH)):
                 tilesc = list(tiles)
@@ -301,19 +305,18 @@ def placeTile(tiles, field):
                     newField = placeTile2(tile, field, topLeft)
                     placeTile(tilesc,newField);
                 if(tile.width != tile.height):
-                    flippedTile = flip(tile)
-                    if(fits(flippedTile, field, topLeft)):
-                        newField = placeTile2(flippedTile, field, topLeft)
-                        placeTile(tilesc,newField);
+                   flippedTile = flip(tile)
+                   if(fits(flippedTile, field, topLeft)):
+                       newField = placeTile2(flippedTile, field, topLeft)
+                       placeTile(tilesc,newField);
     return
 
 times = []
 
 
-
 for filename in os.listdir('tilings'):
-        file = open("tilings\\"+filename,"r")           
-        
+        file = open("tilings\\55-0-0.tiles","r")           
+
         solutions = []
         stepsTaken = 0
         
@@ -336,11 +339,14 @@ for filename in os.listdir('tilings'):
                 tilenumber += 1
         
         numberofsolutions = 0
+        global start_time
         start_time = time.time()
         
         placeTile(tileList,coordinateList)
         run_time = time.time() - start_time
-        print("Found a solution in: "+str(run_time)+" for file: " +filename)
+        
+        print("Found a solution in: "+str(run_time)+": for file: " +filename +" stepstaken: "+ str(stepsTaken))
+        
         times.append(run_time)
         
 

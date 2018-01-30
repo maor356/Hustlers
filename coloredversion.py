@@ -230,6 +230,7 @@ def printTiles(tiles):
         print("Tile %d - %d x %d" % (tile.tilenumber, tile.width, tile.height))
 
 def checkFitArea(areaInput,tiles):
+    
     areaSmall = areaInput[0]
     heightSmall = areaInput[1]
     widthSmall = areaInput[2]
@@ -248,22 +249,25 @@ def checkFitArea(areaInput,tiles):
                 sumWidth.append(min(tile.width,tile.height))
                 sumHeight.append(max(tile.width,tile.height))
         else:
+             
              if (max(tile.width,tile.height) <= widthSmall) :
-                fittingTiles.append(tile)
-                sumWidth.append(min(tile.width,tile.height))
-                sumHeight.append(max(tile.width,tile.height))
-             elif (min(tile.width,tile.height) <= widthSmall) :
                 fittingTiles.append(tile)
                 sumWidth.append(max(tile.width,tile.height))
                 sumHeight.append(min(tile.width,tile.height))
+             elif (min(tile.width,tile.height) <= widthSmall) :
+                fittingTiles.append(tile)
+                sumWidth.append(min(tile.width,tile.height))
+                sumHeight.append(max(tile.width,tile.height))
+                
     if (len(fittingTiles) == 0):
+        
         return False
 
     if (sum(sumWidth) < widthSmall):
-
+        
         return False
     if (sum(sumHeight) < heightSmall):
-
+        
         return False
 
 def placeTile(tiles, field):
@@ -281,7 +285,7 @@ def placeTile(tiles, field):
 
 #    if (numberofsolutions == 1):
 #        return
-#    printField(field)
+    
     if isFull(field):
         solutions.append(field)
         numberofsolutions += 1
@@ -292,21 +296,24 @@ def placeTile(tiles, field):
         return
     #topLeft = findTopLeft(field)
     topLeft = smallestValley(field)
-    print(topLeft)
+    
     oldW = None
     oldH = None
-    if not (checkMinWidth(field,tiles)):
-        print("Here")
-        return
-    elif not (checkMinHeight(field,tiles)):
-        print("HereHeight")
-        return
+    
     emptySpace = findArea(tiles,field)
     if (emptySpace):
         if (checkFitArea(emptySpace,tiles) == False):
-            print("HereArea")
-           # printField(field)
-            return
+           
+           return
+    
+    if not (checkMinWidth(field,tiles)):
+        
+        return
+    elif not (checkMinHeight(field,tiles)):
+       
+        return
+    
+
     for tile in tiles:
         if not ((tile.width == oldW) and (tile.height == oldH)) or not ((tile.height == oldW) and (tile.width == oldH)):
                 oldW = tile.width
@@ -316,14 +323,16 @@ def placeTile(tiles, field):
                 if fits(tile, field, topLeft):
                     newField = placeTile2(tile, field, topLeft)
                     placeTile(tilesc,newField);
+                   
                 if(tile.width != tile.height):
+                    
                     flippedTile = flip(tile)
                     if(fits(flippedTile, field, topLeft)):
                         newField = placeTile2(flippedTile, field, topLeft)
                         placeTile(tilesc,newField);
     return
 
-file = open("example.tiles","r")
+file = open("tileset2.tiles","r")
 solutions = []
 stepsTaken = 0
 properties = file.readline().rstrip().split(" ")
