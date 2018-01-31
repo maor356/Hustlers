@@ -332,7 +332,7 @@ def placeTile(tiles, field):
                         placeTile(tilesc,newField);
     return
 
-file = open("tileset2.tiles","r")
+file = open("filename.tiles","r")
 solutions = []
 stepsTaken = 0
 properties = file.readline().rstrip().split(" ")

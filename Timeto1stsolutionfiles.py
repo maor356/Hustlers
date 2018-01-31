@@ -250,17 +250,15 @@ def findArea(tiles,field):
                 rowStr = str(row)[1:-1]
                 if (markerStr in rowStr):
                     if((marker[0]-1 in row) or (marker[-1]+1 in row)):
-               #         print("Area= " + str(height*width))
+               
                         return [heigth*width,heigth,width,False];
                     else:
-              #          print ("Height " + str(height))
+              
                         heigth = heigth + 1;
-             #           print ("Height " + str(height))
+             
             else:
                 heigth = heigth + 1;
-            #print (row)
-            #print ("Height " + str(height))
-            #print(heigth)
+     
         return [heigth*width,heigth,width,True];
                         
 def placeTile(tiles, field):
@@ -272,8 +270,7 @@ def placeTile(tiles, field):
     if isFull(field):
         solutions.append(field)
         numberofsolutions += 1
-        #print("Solution %d steps: %d" % (numberofsolutions,stepsTaken))
-        #printField(field)
+    
         return
 
     if(len(tiles) == 0):
