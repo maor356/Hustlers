@@ -16,7 +16,7 @@ $ pip install colored
 
 The file should look like this:
 ```
-width: WIDTHFIELD height: HEIGHTFIELD 
+width: WIDTHFIELD height: HEIGHTFIELD scale: RANDOMNUMBER
 NumberOfTimesThisTileOccurs times WidthTilexHeightTile
 NumberOfTimesThisTileOccurs times WidthTile2xHeightTile2
 ...
