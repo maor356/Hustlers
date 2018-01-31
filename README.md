@@ -1,6 +1,7 @@
 # Perfect fit tiling problem
 
-One Paragraph of project description goes here
+This project is for the course Heuristics on the Vrije Universiteit of Amsterdam. 
+The task is to write an algorithm that effeciently find ways to perfectly put tiles in a field.
 
 ## Getting Started
 
